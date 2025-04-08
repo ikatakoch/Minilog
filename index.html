@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Minilog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  </head>
+  <style media="screen">
+  @font-face {
+    font-family: "ipaexg";
+    src: url(ipaexg.ttf) format("truetype"),
+    　　　url(ipaexg.svg) format("svg");
+  }
+    html {
+      background-color: #222;
+    }
+    body {
+      font-family: "ipaexg";
+    }
+    .brand {
+      font-family: "Poppins";
+      font-weight: bold;
+      font-size: 30px;
+      padding: 30px;
+      color: #6699CC;
+ }
+
+.site-header {
+  position: relative;
+  background-color: black; }
+
+.site-header__wrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem; }
+  @media (min-width: 600px) {
+    .site-header__wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0;
+      padding-bottom: 0; } }
+@media (min-width: 600px) {
+  .nav__wrapper {
+    display: flex; } }
+
+@media (max-width: 599px) {
+  .nav__wrapper {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: -1;
+    background-color: #d9f0f7;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    justify-content: center; /* 水平方向の中央揃え */
+  align-items: center;
+  }
+
+    .nav__wrapper.active {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0); } }
+
+.nav__item a {
+  display: block;
+  padding: 1.5rem 1rem;
+  color: white;
+ }
+ .nav__item p {
+   display: block;
+   padding: 1.5rem 1rem;
+   color: white;
+  }
+
+.nav__toggle {
+  display: none; }
+  @media (max-width: 599px) {
+    .nav__toggle {
+      display: block;
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      background-image: url("hamburger.svg");
+      height:50px;
+      } }
+.post__item {
+  width: min(95vw, 95vh * 0.75);  /* 横幅の計算 */
+  height: min(55vh, 95vw / 0.75); /* 縦幅の計算 */
+  background-color: #EEEEEE;
+  border-radius: 5px;
+  padding: 30px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+.post_item {
+  width: min(95vw, 95vh * 0.75);  /* 横幅の計算 */
+  height: min(45vh, 95vw / 0.75); /* 縦幅の計算 */
+  background-color: #EEEEEE;
+  border-radius: 5px;
+  padding: 30px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+.large__posts {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px;
+}
+.small__posts {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 5px;
+}
+.space {
+  width: 50px;
+  flex-shrink: 0;
+}
+.index {
+  display: flex;
+  flex-direction: column;
+  min-height: 50px;
+}
+
+.index h1,
+.index p {
+  margin: 0;
+}
+.index h1 {
+  line-height: 0.7;
+}
+
+.index p {
+  line-height: 0.5;
+}
+.white {
+  color: white;
+}
+.padding {
+  padding: 50px;
+}
+.post__img {
+  max-width: 50%;
+  max-height: 50%;
+}
+.audio {
+  height: 50px;
+  padding: 10px;
+  top: 15px;
+}
+#hamburger {
+  padding: 50px;
+  list-style-type: none;
+}
+hr {
+   background-color: #333;
+  }
+.sita {
+  position: fixed;
+  display:flex;
+  bottom: 0;
+  text-align: center;
+}
+/* --- INPUT=TEXTの標準デザイン設定 ---------------------*/
+.textArea {
+ width         : 250px;               /* 入力域の最大幅 */
+ background    : #ffffff;             /* 入力域の背景色 */
+ border        : 2px solid #ffffff;   /* 入力域の枠線   */
+ border-radius : 4px;                 /* 入力域の角丸   */
+ padding       : 7px;                /* 入力文字の余白 */
+ font-size     : 14px;                /* 入力文字サイズ */
+ color         : white;             /* 入力文字の色   */
+ font-weight   : bold;                /* 入力文字の太字 */
+ letter-spacing: .1em;                /* 入力文字の間隔 */
+ line-height   : 16px;                /* 入力文字の間隔 */
+}
+/* --- 入力フィールドにフォーカスか来たら ----------------*/
+.textArea:focus {
+ border-color  : #6699cc;                 /* 枠線色     */
+ background    : rgba(102, 153, 204, 0.20);  /* 背景色     */
+ outline       : 0;
+ color         : white;
+}
+/* --- 入力説明の文字(標準) -----------------------------*/
+.textArea:placeholder-shown {
+ color         : #808080;                 /* 文字色     */
+}
+/* --- 入力説明の文字(Chrome,Safari,Android,iOS等) ---- -*/
+.textArea::-webkit-input-placeholder {
+ color         : #808080;                 /* 文字色     */
+}
+/* --- 入力説明の文字(IE用) -----------------------------*/
+.textArea:-ms-input-placeholder {
+ color         : #808080;                 /* 文字色     */
+}
+#menu__toggle {
+  opacity: 0;
+}
+#menu__toggle:checked + .menu__btn > span {
+  transform: rotate(45deg);
+}
+#menu__toggle:checked + .menu__btn > span::before {
+  top: 0;
+  transform: rotate(0deg);
+}
+#menu__toggle:checked + .menu__btn > span::after {
+  top: 0;
+  transform: rotate(90deg);
+}
+#menu__toggle:checked ~ .menu__box {
+  left: 0 !important;
+}
+
+.humburger-menu {
+  display: none;
+  float: right;
+}
+@media (max-width: 599px) {
+  .humburger-menu {
+  display: block;
+  float: right;
+}
+}
+.site-header__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.hamburger-container {  /* 追加 */
+  position: relative;
+}
+
+.menu__btn {
+  display: none;
+  position: absolute; /* 変更 */
+  top: 1rem;       /* 調整 */
+  right: 1rem;     /* 調整 */
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+@media (max-width: 599px) {
+  .menu__btn {
+    display: block;
+  }
+}
+
+.menu__btn > span,
+.menu__btn > span::before,
+.menu__btn > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #616161;
+  transition-duration: .25s;
+}
+.menu__btn > span::before {
+  content: '';
+  top: -8px;
+}
+.menu__btn > span::after {
+  content: '';
+  top: 8px;
+}
+
+.menu__box {
+  display: block;
+  position: fixed; /* 変更 */
+  top: 0;
+  left: -100%;
+  width: 300px;
+  height: 100%;
+  margin: 0;
+  padding: 80px 0;
+  list-style: none;
+  background-color: #ECEFF1;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
+  transition-duration: .25s;
+}
+.menu__item {
+  display: block;
+  padding: 12px 24px;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: .25s;
+}
+.menu__item:hover {
+  background-color: #CFD8DC;
+}
+.menu_item {
+  display: block;
+  padding: 12px 24px;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  transition-duration: .25s;
+}
+.search-form-5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px; /* 任意の幅に調整してください */
+    overflow: hidden;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    height: 45px;
+    margin: 0 auto;
+}
+
+.search-form-5 input {
+    height: 45px;
+    padding: 5px 15px;
+    border: none;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+    font-size: 1em;
+    outline: none;
+}
+
+.search-form-5 input::placeholder {
+    color: #777777;
+}
+
+.search-form-5 button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 45px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.search-form-5 button::after {
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%20%3Cpath%20d%3D%22M23.7%2020.8%2019%2016.1c-.2-.2-.5-.3-.8-.3h-.8c1.3-1.7%202-3.7%202-6C19.5%204.4%2015.1%200%209.7%200S0%204.4%200%209.7s4.4%209.7%209.7%209.7c2.3%200%204.3-.8%206-2v.8c0%20.3.1.6.3.8l4.7%204.7c.4.4%201.2.4%201.6%200l1.3-1.3c.5-.5.5-1.2.1-1.6zm-14-5.1c-3.3%200-6-2.7-6-6s2.7-6%206-6%206%202.7%206%206-2.6%206-6%206z%22%20fill%3D%22%23777777%22%3E%3C%2Fpath%3E%20%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    content: '';
+}
+  </style>
+  <body>
+    <header class="site-header">
+    <div class="site-header__wrapper">
+      <a href="/" class="brand">Minilog</a>
+      <nav class="nav">
+        <div class="hamburger-container">  <input id="menu__toggle" type="checkbox" />
+          <label class="menu__btn" for="menu__toggle">
+            <span></span>
+          </label>
+          <ul class="menu__box">
+            <li><a class="menu__item" href="#">投稿</a></li>
+            <li><a class="menu__item" href="/login/" id="login-button">ログイン</a></li>
+            <li><a class="menu__item" href="#" id="logout-button">ログアウト</a></li>
+            <li><p class="menu_item" id="user-info">現在：未ログイン</p></li>
+            <li><a class="menu__item" href="/inquiry/">問い合わせ</a></li>
+          </ul>
+        </div>
+        <ul class="nav__wrapper">
+          <form class="search-form-5" method="get">
+    <label>
+        <input type="search" placeholder="キーワードを入力" id="search">
+    </label>
+    <button type="button" aria-label="検索" onclick="search()"></button>
+</form>
+          <li class="nav__item"><a href="javascript:dopost()">投稿</a></li>
+          <audio src="music.mp3" id="audio"></audio>
+          </audio>
+          <li class="nav__item"><a href="login" id="login-button">ログイン</a></li>
+          <li class="nav__item"><a href="#" id="logout-button">ログアウト</a></li>
+          <li class="nav__item"><p id="user-info"></p></li>
+          <li class="nav__item"><img src="audio1.png" alt="" onclick="music()" class="audio" id="audioButton"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <p class="white">メイン投稿</p>
+    <div class="large__posts" id="large__posts">
+    </div>
+
+    <div class="padding" id="postform">　<!--ポスト処理-->
+  <h1 class="title white">投稿</h1>
+  <form class="" action="index.html" method="post">
+    <p class="white">タイトルを入力</p><input type="text" name="" value="" placeholder="タイトル" id="titleInput">
+    <p class="white">本文を入力</p><textarea class="textArea white" id="inText" placeholder="本文" onblur="coloeSet(this)" onfocus="colorReset(this)" oninput="textAreaHeightSet(this)" onchange="textAreaHeightSet(this)"></textarea>
+    <br><br>
+    <p class="white">添付ファイル:</p>
+    <label class="white">
+      <input type="radio" name="attached" value="image" checked>
+      画像
+    </label>
+    <label class="white">
+      <input type="radio" name="attached" value="sketch" >
+      スケッチ
+    </label>
+    <label class="white">
+      <input type="radio" name="attached" value="none" >
+      なし
+    </label>
+    <br><br>
+    <div id="file">
+  <input type="file" name="" value="" accept="image/png, image/jpeg, image/heic" id="imageInput"></input>
+      </div>
+      <div id="canvas">
+        <div class="columns">
+  <div class="column is-half">
+    <canvas id="canvasArea"></canvas>
+  </div>
+  </div>
+<button type="button" name="button" class="button" onclick="clearCanvas()"></button>
+      </div>
+  <div class="sita">
+  <button type="button" name="button" class="button sitata" onclick="readypost()">投稿</button>
+  <button type="button" name="button" onclick="cansell()" class="button is-small sitata">ポスト一覧に戻る</button>
+    </div>
+  </form>
+    </div>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script type="text/javascript">
+  var postform = document.getElementById("postform");
+  postform.style.display = 'none';
+
+  function dopost() {
+      const posts = document.getElementById("posts");
+      posts.style.display = 'none';
+      postform.style.display = 'block';
+  }
+
+  function cansell() {
+      const posts = document.getElementById("posts");
+      posts.style.display = 'flex';
+      postform.style.display = 'none';
+  }
+
+  const supabaseUrl = 'https://ufwmrrvcphwznxgaqbrx.supabase.co';
+  const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmd21ycnZjcGh3em54Z2FxYnJ4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MjY5NDgzOCwiZXhwIjoyMDU4MjcwODM4fQ.0YKEi5LzoBC9qN4P3rZrcVhf2Sbd-wTufYux8FYIDMw';
+
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+  document.addEventListener('DOMContentLoaded', async () => {
+      try {
+          const { data, error } = await supabase.auth.getSession();
+          if (error) {
+              console.error("セッション取得エラー:", error.message);
+          } else if (data.session) {
+              console.log("セッション取得成功:", data.session);
+              updateUI(data.session.user);
+          } else {
+              console.log("ログイン情報なし");
+              updateUI(null);
+          }
+          // ページ読み込み時に投稿を取得して表示
+          await displayPosts();
+      } catch (error) {
+          console.error("セッション取得中にエラーが発生しました:", error);
+      }
+  });
+
+  supabase.auth.onAuthStateChange((event, session) => {
+      console.log("認証状態変更:", event, session);
+
+      if (event === 'SIGNED_IN') {
+          updateUI(session.user);
+      } else if (event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') {
+          updateUI(null);
+      }
+  });
+
+  // UI更新
+  function updateUI(user) {
+      console.log("UI更新 - ユーザー:", user);
+      const loginButton = document.getElementById('login-button');
+      const logoutButton = document.getElementById('logout-button');
+      const userInfo = document.getElementById('user-info');
+
+      if (loginButton && logoutButton && userInfo) {
+          if (user) {
+              loginButton.style.display = 'none';
+              logoutButton.style.display = 'block';
+              userInfo.innerText = `ログイン中: ${user.email}`;
+          } else {
+              loginButton.style.display = 'block';
+              logoutButton.style.display = 'none';
+              userInfo.innerText = '未ログイン';
+              console.log("更新");
+          }
+      } else {
+          console.error("必要なHTML要素が見つかりませんでした。");
+      }
+  }
+
+  // ログアウト処理
+  document.getElementById('logout-button').addEventListener('click', async () => {
+      console.log("ログアウトボタン押下");
+      try {
+          await supabase.auth.signOut();
+      } catch (error) {
+          console.error("ログアウト中にエラーが発生しました:", error);
+      }
+  });
+
+  async function post(input) {  //ポストする
+      let filePath = null;
+      let fileName = null;
+      if (input !== null) {
+          var file = input;
+          var fileExt = file.name.split('.').pop();
+          filePath = generateUUID();
+          fileName = file.name;
+          console.log(filePath);
+          const { data: uploadData, error: uploadError } = await supabase.storage
+              .from("post")
+              .upload(filePath, file, {
+                  cacheControl: "3600",
+                  upsert: false,
+              });
+
+          if (uploadError) {
+              console.error('画像のアップロードエラー:', uploadError.message, uploadError);
+              alert(`画像のアップロードに失敗しました: ${uploadError.message}`);
+              return; // アップロードエラーが発生した場合は、ここで処理を終了
+          }
+      }
+
+
+      const { data: { user } } = await supabase.auth.getUser();
+      const { data: insertData, error: insertError } = await supabase // 変数名を変更
+          .from('post')
+          .insert([
+              { image_path: filePath, user_id: user.id, file_name: fileName, title: document.getElementById("titleInput").value, mainText: document.getElementById("inText").value }
+          ]);
+
+      if (insertError) { // 変数名を変更
+          console.error('データベースの挿入エラー:', insertError.message, insertError);
+          alert(`投稿データの追加に失敗しました: ${insertError.message}`);
+          return;
+      }
+
+      console.log('投稿が完了しました:', insertData);
+      alert('投稿が完了しました。'); //投稿
+      // 投稿後に表示を更新
+      await displayPosts();
+  }
+
+  async function fetchPostsData() {
+      try {
+          const { data: posts, error: postsError } = await supabase
+              .from("post")
+              .select("*"); // 全てのカラムを選択
+
+          if (postsError) {
+              console.error("投稿データの取得に失敗しました:", postsError);
+              alert("投稿データの取得に失敗しました。");
+              return [];
+          }
+          return posts;
+      } catch (error) {
+          console.error("投稿データ取得中にエラーが発生しました:", error);
+          alert("予期せぬエラーが発生しました。");
+          return [];
+      }
+  }
+
+  async function displayPosts() {
+      const postsData = await fetchPostsData();
+      const postlist = document.getElementById("large__posts");
+
+      // 既存の投稿をクリア
+      postlist.innerHTML = '';
+
+      if (postsData && postsData.length > 0) {
+          for (const post of postsData) {
+              const postitem = document.createElement("div");
+              postitem.className = "post__item";
+
+              const space = document.createElement("div");
+              space.className = "space";
+
+              const indexDiv = document.createElement("div");
+              indexDiv.className = "index";
+
+              const titleH1 = document.createElement("h1");
+              titleH1.className = "title";
+              titleH1.textContent = post.title || "タイトルなし";
+
+              const userP = document.createElement("p");
+              userP.textContent = `@${post.user_id.substring(0, 8)}...さん`;
+
+              const hr = document.createElement("hr");
+
+              const textP = document.createElement("p");
+              textP.textContent = post.mainText || "本文なし";
+
+              const img = document.createElement("img");
+              img.className = "post__img";
+              img.alt = post.file_name || "投稿画像";
+              if (post.image_path) {
+                  img.src = `https://ufwmrrvcphwznxgaqbrx.supabase.co/storage/v1/object/public/post/${post.image_path}`;
+              }
+
+              indexDiv.appendChild(titleH1);
+              indexDiv.appendChild(userP);
+              postitem.appendChild(indexDiv);
+              postitem.appendChild(hr);
+              postitem.appendChild(textP);
+              if (post.image_path) {
+                  postitem.appendChild(img);
+              }
+
+              postlist.appendChild(space);
+              postlist.appendChild(postitem);
+          }
+      } else {
+          const noPostsMessage = document.createElement("p");
+          noPostsMessage.textContent = "まだ投稿はありません。";
+          postlist.appendChild(noPostsMessage);
+      }
+  }
+
+  function music() { //音を鳴らす
+      const audio = document.getElementById("audio");
+      const button = document.getElementById("audioButton");
+      const button2 = document.getElementById("AudioButton");
+      console.log(button.src);
+      const audio1Path = window.location.origin + "/audio1.png"; // 絶対パスを構築
+      const audio0Path = window.location.origin + "/audio0.png";
+
+      if (button.src === audio1Path) {
+          audio.play();
+          button.src = "audio0.png";
+      } else {
+          audio.pause();
+          button.src = "audio1.png";
+      }
+
+      if (button2 && button2.src === audio1Path) {
+          audio.play();
+          button2.src = "audio0.png";
+      } else if (button2) {
+          audio.pause();
+          button2.src = "audio1.png";
+      }
+  }
+
+  function humburgermenu() { //ハンバーガーメニュー　//🍔
+      var humburger = document.getElementById("hamburger");
+      if (hamburger.style.display == "none") {
+          humburger.style.display = 'block';
+          const posts = document.getElementById("posts");
+          posts.style.display = 'none';
+          supabase.auth.getSession().then(({ data, error }) => {
+              const loginButton = document.getElementById('login-Button');
+              const logoutButton = document.getElementById('logout-Button');
+              const userInfo = document.getElementById('user-Info');
+
+              if (loginButton && logoutButton && userInfo) {
+                  if (data?.session?.user) {
+                      loginButton.style.display = 'none';
+                      logoutButton.style.display = 'block';
+                      userInfo.innerText = `ログイン状態:現在ログイン中: ${data.session.user.email}`;
+                  } else {
+                      loginButton.style.display = 'block';
+                      logoutButton.style.display = 'none';
+                      userInfo.innerText = 'ログイン状態:未ログイン';
+                      console.log("更新");
+                  }
+              } else {
+                  console.error("必要なHTML要素が見つかりませんでした。");
+              }
+          });
+      } else {
+          humburger.style.display = 'none';
+          const posts = document.getElementById("posts");
+          posts.style.display = 'flex';
+      }
+  }
+
+  class Painter { //スケッチ機能
+      constructor(selectorId, width, height, pencilSelector = {
+          colorPencil: '#pencilColor',
+          colorPalette: '.color-palette',
+          pencilSize: '#pencilSize',
+          pencilOpacity: '#pencilOpacity',
+          clearButton: '#clearButton',
+          downloadButton: '#downloadButton',
+          previewButton: '#previewButton',
+          previewArea: '#preview',
+          copyURLButton: '#copyURLButton',
+      }) {
+          this.selectorId = selectorId;
+          this.width = width;
+          this.height = height;
+
+          this.pencilSelector = pencilSelector
+
+          this.x = null;
+          this.y = null;
+
+          this.init();
+      }
+
+      /**
+       * initialize function.
+       */
+      init = () => {
+          this.element = document.getElementById(this.selectorId);
+          this.clearButton = document.querySelector(this.pencilSelector.clearButton);
+          this.downloadButton = document.querySelector(this.pencilSelector.downloadButton);
+          this.previewButton = document.querySelector(this.pencilSelector.previewButton);
+          this.previewArea = document.querySelector(this.pencilSelector.previewArea);
+          this.copyURLButton = document.querySelector(this.pencilSelector.copyURLButton);
+
+          if (this.element == null) {
+              throw this.error('Selector is not found. Please specify the id.');
+          }
+
+          if (this.element.tagName !== 'CANVAS') {
+              throw this.error(`${this.selectorId} is not canvas`);
+          }
+
+          this.element.width = this.width;
+          this.element.height = this.height;
+
+          this.element.addEventListener('mousemove', this.onMouseMove);
+          this.element.addEventListener('mousedown', this.onMouseDown);
+          this.element.addEventListener('mouseout', this.drawFinish);
+          this.element.addEventListener('mouseup', this.drawFinish);
+
+          if (this.clearButton != null) {
+              this.clearButton.addEventListener('click', this.clearCanvas);
+          }
+
+          if (this.downloadButton != null) {
+              this.downloadButton.addEventListener('click', this.download);
+          }
+
+          if (this.previewButton != null) {
+              this.previewButton.addEventListener('click', this.preview);
+          }
+
+          if (this.copyURLButton != null) {
+              this.copyURLButton.addEventListener('click', this.copyURL)
+          }
+
+          if (this.previewArea != null) {
+              this.previewArea.src = './image/no-preview.jpg';
+              this.previewArea.width = this.width;
+              this.previewArea.height = this.height;
+          }
+
+          this.context = this.element.getContext('2d');
+
+          this.setCanvasStyle();
+
+          // init pencil setting.
+          this.penSize = 3;
+          this.penColor = '#000000';
+          this.penOpacity = 1;
+
+          this.initColorPencilElements();
+      }
+
+      /**
+       * Initialize colored pencils
+       */
+      initColorPencilElements = () => {
+          const { colorPencil: color, colorPalette: palette, pencilSize: size, pencilOpacity: opacity } = this.pencilSelector;
+          const colorPencil = document.querySelector(color);
+          const colorPalette = document.querySelector(palette);
+          const pencilSize = document.querySelector(size);
+          const pencilOpacity = document.querySelector(opacity);
+
+          if (colorPencil != null) {
+              colorPencil.value = this.penColor;
+
+              colorPencil.addEventListener('click', (ev) => {
+                  ev.target.type = 'color'
+              });
+              colorPencil.addEventListener('blur', (ev) => {
+                  ev.target.type = 'text';
+                  if (colorPalette != null) {
+                      colorPalette.style.backgroundColor = ev.target.value;
+                  }
+              });
+              colorPencil.addEventListener('change', (ev) => {
+                  this.penColor = ev.target.value;
+              });
+          }
+
+          if (colorPalette != null) {
+              colorPalette.style.backgroundColor = this.penColor;
+          }
+
+          if (pencilSize != null) {
+              pencilSize.value = this.penSize;
+              pencilSize.addEventListener('change', (ev) => {
+                  this.penSize = ev.target.value;
+              });
+          }
+
+          if (pencilOpacity != null) {
+              pencilOpacity.value = this.penOpacity;
+              pencilOpacity.addEventListener('change', ev => {
+                  this.penOpacity = ev.target.value;
+              });
+          }
+      }
+
+      /**
+       * set canvas style
+       */
+      setCanvasStyle = () => {
+          this.element.style.border = '1px solid #778899';
+
+          this.context.beginPath();
+          this.context.fillStyle = "#f5f5f5";
+          this.context.fillRect(0, 0, this.width, this.height);
+      }
+
+      /**
+       * clear canvas
+       */
+      clearCanvas = () => {
+          this.context.clearRect(0, 0, this.element.width, this.element.height);
+
+          this.setCanvasStyle();
+      }
+
+
+      /**
+       * download image.
+       */
+      download = () => {
+          this.element.toBlob((blob) => {
+              const url = URL.createObjectURL(blob);
+              const aTag = document.createElement('a');
+              document.body.appendChild(aTag);
+
+              aTag.download = 'drawImage.png';
+              aTag.href = url;
+              aTag.click();
+              aTag.remove();
+
+              URL.revokeObjectURL(url);
+          });
+      }
+
+
+      preview = () => {
+          this.previewArea.src = this.element.toDataURL();
+
+          this.previewArea.width = this.width;
+          this.previewArea.height = this.height;
+      }
+
+      copyURL = () => { //これを使う予定
+          const source = this.element.toDataURL();
+          navigator.clipboard.writeText(source).then(() => {
+              alert('コピーしました。画像を共有できます。');
+          }).catch(() => {
+              alert('コピーに失敗しました。ブラウザの設定を見直してみてください。');
+          });
+      }
+
+      /**
+       * Calculate the coordinates from the event.
+       * @param {*} event
+       */
+      calcCoordinate = (event) => {
+          const rect = event.target.getBoundingClientRect();
+
+          const x = ~~(event.clientX - rect.left);
+          const y = ~~(event.clientY - rect.top);
+
+          return { x, y };
+      }
+    }
+
+        error = (message) => {
+            const error = new Error(`[painter.js] ${message}`);
+            return error;
+        }
+
+        /**
+         * mouse down event
+         * @param {*} event
+         */
+        onMouseDown = (event) => {
+            if (event.button !== 0) {
+                return;
+            }
+            const coordinate = this.calcCoordinate(event);
+            this.draw(coordinate);
+        }
+
+        /**
+         * mouse move event
+         * @param {*} event
+         */
+        onMouseMove = (event) => {
+            if (event.buttons !== 1) {
+                return;
+            }
+            const coordinate = this.calcCoordinate(event);
+            this.draw(coordinate);
+        }
+
+        /**
+         * End of drawing process.
+         */
+        drawFinish = () => {
+            this.x = null;
+            this.y = null;
+        }
+
+        /**
+         * drawing process
+         * @param {*} coordinate
+         */
+        draw = (coordinate = { x: 0, y: 0 }) => {
+            const { x: toX, y: toY } = coordinate;
+            this.context.beginPath();
+            this.context.globalAlpha = this.penOpacity;
+
+            const fromX = this.x || toX;
+            const fromY = this.y || toY;
+
+            this.context.moveTo(fromX, fromY);
+
+            this.context.lineTo(toX, toY);
+
+            this.context.lineCap = 'round';
+            this.context.lineWidth =  this.penSize;
+            this.context.strokeStyle = this.penColor;
+
+            this.context.stroke();
+
+            this.x = toX;
+            this.y = toY;
+        }
+
+    const painter = new Painter('canvasArea', 450, 407);
+
+    clearCanvas = () => {
+        this.context.clearRect(0, 0, this.element.width, this.element.height);
+
+        this.setCanvasStyle();
+    }
+    var postAttached = "image";
+    let sketch = document.getElementById("canvas")
+    sketch.style.display = "none"
+      let radio = document.getElementsByName("attached")
+      console.log(radio);
+      radio.forEach(function (element) { //エラーを握りつぶす
+        element.addEventListener('change', valueChange);
+      });
+
+    function valueChange() {
+        let radio = document.getElementsByName("attached")
+        let len = radio.length;
+        let checkValue = '';
+
+        for (let i = 0; i < len; i++) {
+            if (radio.item(i).checked) {
+                checkValue = radio.item(i).value;
+            }
+        }
+        console.log(checkValue);
+        let image = document.getElementById("file")
+        let sketch = document.getElementById("canvas")
+        if (checkValue == "image") {
+            postAttached = "image";
+            image.style.display = "block"
+            sketch.style.display = "none"
+        } else if (checkValue == "sketch") {
+            postAttached = "sketch";
+            image.style.display = "none"
+            sketch.style.display = "block"
+        } else {
+            postAttached = '';
+            image.style.display = "none"
+            sketch.style.display = "none"
+        }
+    }
+
+    async function readypost() {
+        console.log(postAttached);
+        if (postAttached == "image") {
+            post(document.getElementById("imageInput").files[0]);
+        } else if (postAttached == "sketch") {
+            const canvas = document.getElementById('canvasArea');
+            canvas.toBlob(async (blob) => {
+                if (blob) {
+                    const file = new File([blob], generateUUID().replace('image/', '') + '.png', { type: 'image/png' });
+                    await post(file);
+                } else {
+                    alert('スケッチデータが取得できませんでした。');
+                }
+            });
+        } else {
+            post(null);
+        }
+    }
+    function generateUUID() {
+        let d = new Date().getTime();
+        let d2 = (performance && performance.now && (performance.now() * 1000)) || 0;
+        return 'image/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            let r = Math.random() * 16;
+            if (d > 0) {
+                r = (d + r) % 16 | 0;
+                d = Math.floor(d / 16);
+            } else {
+                r = (d2 + r) % 16 | 0;
+                d2 = Math.floor(d2 / 16);
+            }
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+    function coloeSet(argObj) {
+        // ==============================================
+        //    入力済み時の背景色設定
+        // ==============================================
+        if (argObj.value == "") {
+            argObj.style.backgroundColor = "";
+        } else {
+            argObj.style.backgroundColor = "rgba(30, 107, 185, 0.20)";
+        }
+    }
+
+    function colorReset(argObj) {
+        // ==============================================
+        //    フォーカス時の背景色リセット
+        // ==============================================
+        argObj.style.backgroundColor = "";
+    }
+
+    function textAreaHeightSet(argObj) {
+        // ==============================================
+        //    フォーカス時の背景色リセット
+        // ==============================================
+        // 一旦テキストエリアを小さくしてスクロールバー（縦の長さを取得）
+        argObj.style.height = "10px";
+        var wSclollHeight = parseInt(argObj.scrollHeight);
+        // 1行の長さを取得する
+        var wLineH = parseInt(argObj.style.lineHeight.replace(/px/, ''));
+        // 最低2行の表示エリアにする
+        if (wSclollHeight < (wLineH * 2)) { wSclollHeight = (wLineH * 2); }
+        // テキストエリアの高さを設定する
+        argObj.style.height = wSclollHeight + "px";
+    }
+
+function search() {
+  const word = document.getElementById("search")
+  console.log(word)
+  window.location.href = "google.com/search?q=" + word.value;
+}
+    </script>
+  </body>
+</html>
