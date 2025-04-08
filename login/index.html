@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  </head>
+  <style media="screen">
+    html {
+      background-color: #222;
+    }
+    .brand {
+      font-family: "Poppins", sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+      padding: 30px;
+      color: #6699CC;
+ }
 
+.site-header {
+  position: relative;
+  background-color: black; }
+
+.site-header__wrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem; }
+  @media (min-width: 600px) {
+    .site-header__wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0;
+      padding-bottom: 0; } }
+@media (min-width: 600px) {
+  .nav__wrapper {
+    display: flex; } }
+
+@media (max-width: 599px) {
+  .nav__wrapper {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: -1;
+    background-color: #d9f0f7;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+    .nav__wrapper.active {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0); } }
+
+.nav__item a {
+  display: block;
+  padding: 1.5rem 1rem;
+  color: white;
+ }
+ .nav__item p {
+   display: block;
+   padding: 1.5rem 1rem;
+   color: white;
+  }
+ .nav_item a {
+   display: block;
+   padding: 1.5rem 1rem;
+   color: #6699CC;
+  }
+
+.nav__toggle {
+  display: none; }
+  @media (max-width: 599px) {
+    .nav__toggle {
+      display: block;
+      position: absolute;
+      right: 1rem;
+      top: 1rem; } }
+.post__item {
+  width: 500px;
+  height: 500px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+.posts {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 100px;
+}
+.space {
+  width: 50px;
+  flex-shrink: 0;
+}
+.index {
+  display: flex;
+  flex-direction: column;
+  min-height: 50px;
+}
+
+.index h1,
+.index p {
+  margin: 0;
+}
+.index h1 {
+  line-height: 0.7;
+}
+
+.index p {
+  line-height: 0.5;
+}
+.title {
+  color: white;
+}
+.padding {
+  padding: 50px;
+}
+  </style>
+  <body>
+    <header class="site-header">
+      <div class="wrapper site-header__wrapper">
+        <a href="/" class="brand">Minilog</a>
+        <nav class="nav">
+          <button class="nav__toggle" aria-expanded="false" type="button">
+            menu
+          </button>
+          <ul class="nav__wrapper">
+            <li class="nav__item"><a href="/post/">投稿</a></li>
+            <li class="nav_item"><a href="#">ログイン</a></li>
+            <li class="nav__item"><p id="user-info">未ログイン</p></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="padding">
+      <h1 class="title">ログイン</h1>
+      <input type="email" id="email" placeholder="メールアドレスを入力">
+      <button onclick="sendMagicLink()" class="button is-small" id="send">メールを送る</button>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+  const { createClient } = window.supabase;
+  const supabaseUrl = 'https://ufwmrrvcphwznxgaqbrx.supabase.co';  // SupabaseのURL
+  const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmd21ycnZjcGh3em54Z2FxYnJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI2OTQ4MzgsImV4cCI6MjA1ODI3MDgzOH0.annyBS3Yn_nA6GicxDyKCqTxVMRR1hSYPmEEJ6jokss';  // Supabaseのanonキー
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  async function sendMagicLink() {
+    document.getElementById("send").classList.add('is-loading');
+    const email = document.getElementById("email").value;
+    if (!email) {
+      alert("メールアドレスを入力してください");
+      document.getElementById("send").classList.remove('is-loading');
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithOtp({ email });
+
+    if (error) {
+      alert("エラーが発生しました：" + error.message);
+      document.getElementById("send").classList.remove('is-loading');
+    } else {
+      alert("Magic Linkを送信しました！メールを確認してください。");
+      document.getElementById("send").classList.remove('is-loading');
+    }
+  }
+</script>
+  </body>
+</html>
